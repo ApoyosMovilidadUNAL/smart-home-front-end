@@ -1,0 +1,34 @@
+<md-content flex layout-xs="column" layout="row" layout-fill >
+	<md-card flex class="md-padding">
+		<md-card-title>
+			<md-card-title-text layout="row" layout-align="start center">
+				<span class="md-headline"><h1>Clientes</h1></span>
+				<span flex ></span>
+				<span >
+					<md-button ng-click="addCliente($event)" aria-label="description">
+						<i class="material-icons" style="font-size : 48px" >add_circle</i>
+					</md-button>
+				</span>
+			</md-card-title-text>
+			<md-card-title-media>
+				<div class="md-media-lg card-media">
+				</div>
+			</md-card-title-media>
+			<md-divider></md-divider>
+		</md-card-title>
+		<md-card-content>
+			<div flex layout-fill layout="column">
+				<md-button class="md-raised" aria-label="description" ng-repeat="client in client_list" layout="row">
+					<div layout="row" layout-align="start center">
+      					<i flex="5" class="material-icons">person_pickup</i>
+						<p flex="50" layout-align="start" style="text-align: left" >{{ client.nombre }}</p>
+						<span flex ></span>
+					</div>
+				</md-button>
+			</div>
+		</md-card-content>
+		<md-card-actions layout="row" layout-align="end center">
+			
+		</md-card-actions>
+	</md-card>
+</md-content>

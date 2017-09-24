@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>Home Administration</title>
+
+	<link rel="stylesheet" type="text/css" href="css/angular-material.css">
+	<link rel="stylesheet" type="text/css" href="dist/css/material-rules.css">
+
+	<!-- Cargar librerias -->
+	<script type="text/javascript" src="dist/scripts/angular/angular.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-animate/angular-animate.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-aria/angular-aria.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-cookies/angular-cookies.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-material/angular-material.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-messages/angular-messages.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-route/angular-route.js"></script>
+	<script type="text/javascript" src="dist/scripts/angular-ui-router/release/angular-ui-router.js"></script>
+	<script type="text/javascript" src="dist/scripts/app_scripts.js"></script>
+</head>
+<body ng-app="homeApp" ng-controller="MasterController" ng-cloak>
+	
+
+	<div id="page"  >
+		
+		
+
+		<!-- LOGIN -->
+
+
+		<!-- LOGGED USER -->
+
+
+		<div layout="column" ng-if="true" >
+
+			<!-- MENU -->
+
+			<div layout="row" >
+				<div flex=20>
+					<menu layout-fill flex style="padding: 0" />	
+				</div>
+
+				<div flex layout-fill layout="row" ui-view ></div>
+			</div>
+			
+		</div>
+
+	</div>	
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0M7pDnNH1PuU6QzCDBUpFaCP3nw2rszI" async defer></script>
+
+</body>
+</html>
