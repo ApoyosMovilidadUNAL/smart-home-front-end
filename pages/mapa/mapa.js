@@ -19,9 +19,9 @@ function mapaController() {
 					var mapdiv = document.getElementById('map');
 					mapdiv.setAttribute('height', '75%');
 					map = new google.maps.Map(mapdiv, {
-					center: {lat: -34.397, lng: 150.644},
-					zoom: 8
-				});
+						center: {lat: -34.397, lng: 150.644},
+						zoom: 8
+					});
 			};
 
 			$scope.showMap();

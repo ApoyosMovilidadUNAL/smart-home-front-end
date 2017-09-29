@@ -1,5 +1,5 @@
 var PAGES_PUBLIC = ['login']
-var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa']
+var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 
 
 var MENU = [
@@ -28,5 +28,10 @@ var MENU = [
 		'name' : 'Usuarios',
 		'icon' : 'person',
 		'path' : 'usuarios'
+	},
+	{ 
+		'name' : 'Visitas',
+		'icon' : 'flight_takeoff',
+		'path' : 'visitas'
 	}
 ];

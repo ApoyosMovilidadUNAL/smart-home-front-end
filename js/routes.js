@@ -19,5 +19,4 @@ angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
 		});
 
 	});
-
 }]);

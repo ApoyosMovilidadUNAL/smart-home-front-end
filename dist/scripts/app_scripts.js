@@ -1,5 +1,5 @@
 var PAGES_PUBLIC = ['login']
-var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa']
+var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 
 
 var MENU = [
@@ -28,6 +28,11 @@ var MENU = [
 		'name' : 'Usuarios',
 		'icon' : 'person',
 		'path' : 'usuarios'
+	},
+	{ 
+		'name' : 'Visitas',
+		'icon' : 'flight_takeoff',
+		'path' : 'visitas'
 	}
 ];
 angular.module("homeApp",["ui.router", 'ngCookies', 'ngMessages','ngMaterial']);
@@ -60,8 +65,33 @@ angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
 		});
 
 	});
-
 }]);
+angular.module("homeApp").directive('agregarCliente', agregarclienteController);
+
+//--------------------------------------------------------
+
+function agregarclienteController() {
+
+	return {
+
+		scope: {},
+
+		templateUrl : 'pages/clientes/agregarcliente.htm',
+
+		controller : [ '$scope', '$state', function($scope, $state) {
+
+			$scope.goBack = function () {
+				$state.go('clientes');
+			}
+
+			$scope.save = function () {
+				$state.go('clientes');
+			}
+
+			$scope.greeting = "Este es el clientes";
+
+		}]};
+};
 angular.module("homeApp").directive('clientes', clientesController);
 
 //--------------------------------------------------------
@@ -74,7 +104,7 @@ function clientesController() {
 
 		templateUrl : 'pages/clientes/clientes.htm',
 
-		controller : [ '$scope', '$mdDialog', function($scope, $mdDialog) {
+		controller : [ '$scope', '$mdDialog', '$state', function($scope, $mdDialog, $state) {
 
 			$scope.client_list = [
 			{
@@ -94,34 +124,9 @@ function clientesController() {
 			}
 			];
 
-			$scope.addClient = function(ev) {
-				$mdDialog.show({
-					controller: DialogController,
-					templateUrl: 'pages/clientes/dialog1.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: ev,
-					clickOutsideToClose:true
-				})
-				.then(function(answer) {
-					$scope.status = 'You said the information was "' + answer + '".';
-				}, function() {
-					$scope.status = 'You cancelled the dialog.';
-				});
-
-				function DialogController($scope, $mdDialog) {
-					$scope.hide = function() {
-					$mdDialog.hide();
-					};
-
-					$scope.cancel = function() {
-					$mdDialog.cancel();
-					};
-
-					$scope.answer = function(answer) {
-					$mdDialog.hide(answer);
-					};
-				}
-			};
+			$scope.go = function() {
+				$state.go('agregar-cliente');
+			}
 
 			$scope.greeting = "Este es el clientes"
 		}]};
@@ -226,9 +231,9 @@ function mapaController() {
 					var mapdiv = document.getElementById('map');
 					mapdiv.setAttribute('height', '75%');
 					map = new google.maps.Map(mapdiv, {
-					center: {lat: -34.397, lng: 150.644},
-					zoom: 8
-				});
+						center: {lat: -34.397, lng: 150.644},
+						zoom: 8
+					});
 			};
 
 			$scope.showMap();
@@ -272,5 +277,21 @@ function usuariosController() {
 
 		controller : [ '$scope', function($scope) {
 			$scope.greeting = "Este es el usuarios"
+		}]};
+};
+angular.module("homeApp").directive('visitas', visitasController);
+
+//--------------------------------------------------------
+
+function visitasController() {
+
+	return {
+
+		scope: {},
+
+		templateUrl : 'pages/visitas/visitas.htm',
+
+		controller : [ '$scope', function($scope) {
+			$scope.greeting = "Este es el visitas"
 		}]};
 };

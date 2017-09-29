@@ -1,0 +1,32 @@
+<md-content flex layout-xs="column" layout="row" layout-fill >
+	<md-card flex class="md-padding">
+		<md-card-title>
+			<md-card-title-text layout="row" layout-align="start center">
+				<span class="md-headline"><h1>Agregar cliente</h1></span>
+				<span flex ></span>
+				<span >
+					<md-card-actions layout="row" layout-align="end center">
+						<md-button class="md-raised" ng-click="goBack()" >Volver</md-button>
+						<md-button class="md-raised md-primary" ng-click="save()" >Guardar</md-button>
+					</md-card-actions>
+				</span>
+			</md-card-title-text>
+			<md-card-title-media>
+				<div class="md-media-lg card-media">
+				</div>
+			</md-card-title-media>
+			<md-divider></md-divider>
+		</md-card-title>
+		<md-card-content>
+			<form name="userForm">
+
+				<div layout-gt-xs="row">
+					<md-input-container class="md-block" flex-gt-xs>
+						<label>Company (Disabled)</label>
+						<input ng-model="user.company" disabled>
+					</md-input-container>
+				</div>
+			</form>
+		</md-card-content>
+	</md-card>
+</md-content>
