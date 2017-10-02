@@ -24,21 +24,6 @@ angular.module('homeApp')
 
 	});
 
-	$stateProvider
-		.state('login', {
-			url : '/login',
-			template : '< login flex layout="row" params="data.params" ng-cloak />',
-			controller: function ($scope, $stateParams) {
-				$scope.data = {
-					params : $stateParams
-				}
-			},
-			data: {
-		      authorization: true,
-		      redirectTo: 'login'
-		    }
-		});
-
 }])
 
 ;

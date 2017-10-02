@@ -34,10 +34,5 @@ var MENU = [
 		'name' : 'Visitas',
 		'icon' : 'flight_takeoff',
 		'path' : 'visitas'
-	},
-	{
-		'name' : 'Salir',
-		'icon' : 'exit_to_app',
-		'path' : 'login'
 	}
 ];
