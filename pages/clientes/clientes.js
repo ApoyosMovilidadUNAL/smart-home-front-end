@@ -10,25 +10,37 @@ function clientesController() {
 
 		templateUrl : 'pages/clientes/clientes.htm',
 
-		controller : [ '$scope', '$mdDialog', '$state', function($scope, $mdDialog, $state) {
+		controller : [ '$scope', '$mdDialog', '$state','$http', function($scope, $mdDialog, $state,$http) {
 
-			$scope.client_list = [
-			{
-				'nombre' : 'Jhader Manuel',
-				'apellido' : 'Hurtado',
-				'identificacion' : 123456789
-			},
-			{
-				'nombre' : 'Omar Sneyder',
-				'apellido' : 'Eraso',
-				'identificacion' : 123456789
-			},
-			{
-				'nombre' : 'Jesus David',
-				'apellido' : 'Monroy',
-				'identificacion' : 123456789
-			}
-			];
+			
+			$http({
+				method : 'GET',
+				url : SERVER_ENDPOINT + '/cliente/consultarClientes'
+			}).then(function(response) {
+				$scope.client_list = response.data;
+			}, function(error) {
+				console.log(error);
+			});
+
+//			console.log($scope.home_list);
+//			
+//			$scope.client_list = [
+//			{
+//				'nombre' : 'Jhader Manuel',
+//				'apellido' : 'Hurtado',
+//				'identificacion' : 123456789
+//			},
+//			{
+//				'nombre' : 'Omar Sneyder',
+//				'apellido' : 'Eraso',
+//				'identificacion' : 123456789
+//			},
+//			{
+//				'nombre' : 'Jesus David',
+//				'apellido' : 'Monroy',
+//				'identificacion' : 123456789
+//			}
+//			];
 
 			$scope.go = function() {
 				$state.go('agregar-cliente',{'users':$scope.client_list});
