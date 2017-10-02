@@ -10,7 +10,12 @@ function loginController() {
 
 		templateUrl : 'pages/login/login.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', 'Authorization', function($scope, Authorization) {
+
 			$scope.greeting = "Este es el login"
+
+			$scope.login = function() {
+				Authorization.go('home');
+			}
 		}]};
 };

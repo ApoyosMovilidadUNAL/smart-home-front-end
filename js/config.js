@@ -1,3 +1,4 @@
+var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 

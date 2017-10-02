@@ -10,7 +10,8 @@ function homeController() {
 
 		templateUrl : 'pages/home/home.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', '$http', 'Authorization', function($scope, $http, Authorization) {
+
 			$scope.greeting = "Este es el home"
 		}]};
 };

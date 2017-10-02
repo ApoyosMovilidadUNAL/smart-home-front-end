@@ -10,11 +10,15 @@ function menuController() {
 
 		templateUrl : 'pages/menu/menu.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', 'Authorization', function($scope, $state, Authorization) {
 
 			$scope.go = function (path) {
-				$state.go(path);
+				Authorization.go(path);
 			};
+
+			$scope.logout = function() {
+				Authorization.clear()
+			}
 
 		}]};
 };
