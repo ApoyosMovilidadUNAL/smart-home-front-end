@@ -10,7 +10,9 @@ function agregarclienteController() {
 
 		templateUrl : 'pages/clientes/agregarcliente.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', '$stateParams', function($scope, $state, $stateParams) {
+
+			console.log($state.params)
 
 			$scope.goBack = function () {
 				$state.go('clientes');

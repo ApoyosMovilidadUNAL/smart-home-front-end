@@ -34,11 +34,19 @@
 
 		<!-- LOGIN -->
 
+		<div layout="column" ng-if="Authorization.authorized" >
+
+			<div layout="row" >
+				<login />
+			</div>
+			
+		</div>
+
 
 		<!-- LOGGED USER -->
 
 
-		<div layout="column" ng-if="true" >
+		<div layout="column" ng-if="!Authorization.authorized" >
 
 			<!-- MENU -->
 
@@ -54,7 +62,7 @@
 
 	</div>	
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0M7pDnNH1PuU6QzCDBUpFaCP3nw2rszI" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0M7pDnNH1PuU6QzCDBUpFaCP3nw2rszI" defer></script>
 
 </body>
 </html>

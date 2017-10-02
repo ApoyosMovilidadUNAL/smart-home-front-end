@@ -31,7 +31,7 @@ function clientesController() {
 			];
 
 			$scope.go = function() {
-				$state.go('agregar-cliente');
+				$state.go('agregar-cliente',{'users':$scope.client_list});
 			}
 
 			$scope.greeting = "Este es el clientes"

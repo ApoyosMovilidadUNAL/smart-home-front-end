@@ -10,37 +10,16 @@ function hogaresController() {
 
 		templateUrl : 'pages/hogares/hogares.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', '$http' , function($scope, $http) {
 
-			$scope.home_list = [
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			},
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			},
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			}
-			];
+			$http({
+				method : 'GET',
+				url : SERVER_ENDPOINT + '/hogar/consultarHogares'
+			}).then(function(response) {
+				$scope.home_list = response.data;
+			}, function(error) {
+				console.log(error);
+			});
 
 			console.log($scope.home_list);
 		}]};

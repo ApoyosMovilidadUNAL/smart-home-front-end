@@ -10,7 +10,7 @@ function mapaController() {
 
 		templateUrl : 'pages/mapa/mapa.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', '$timeout', function($scope, $state,$timeout) {
 
 			$scope.greeting = "Aqui va el mapa";
 
@@ -22,6 +22,7 @@ function mapaController() {
 						center: {lat: -34.397, lng: 150.644},
 						zoom: 8
 					});
+					$timeout(function(){document.getElementById('map').setAttribute('height', '80%');}, 100);
 			};
 
 			$scope.showMap();

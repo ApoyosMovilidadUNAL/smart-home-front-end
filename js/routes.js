@@ -1,9 +1,9 @@
-angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
+angular.module('homeApp')
+.config(['$stateProvider','$urlRouterProvider',
 	function ($stateProvider,$urlRouterProvider) {
 
 	// ------------------------------------- DEFINIR RUTAS ----------------------------------
 	$urlRouterProvider.otherwise('/');
-
 
 	angular.forEach(PAGES_PRIVATE, function( value, key) {
 
@@ -15,8 +15,30 @@ angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
 				$scope.data = {
 					params : $stateParams
 				}
-			}
+			},
+			data: {
+		      authorization: true,
+		      redirectTo: 'login'
+		    }
 		});
 
 	});
-}]);
+
+	$stateProvider
+		.state('login', {
+			url : '/login',
+			template : '< login flex layout="row" params="data.params" ng-cloak />',
+			controller: function ($scope, $stateParams) {
+				$scope.data = {
+					params : $stateParams
+				}
+			},
+			data: {
+		      authorization: true,
+		      redirectTo: 'login'
+		    }
+		});
+
+}])
+
+;

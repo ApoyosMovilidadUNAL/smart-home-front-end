@@ -1,3 +1,4 @@
+var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 
@@ -33,23 +34,60 @@ var MENU = [
 		'name' : 'Visitas',
 		'icon' : 'flight_takeoff',
 		'path' : 'visitas'
+	},
+	{
+		'name' : 'Salir',
+		'icon' : 'exit_to_app',
+		'path' : 'login'
 	}
 ];
 angular.module("homeApp",["ui.router", 'ngCookies', 'ngMessages','ngMaterial']);
 
-//------------------------------------- MASTER CONTROLLER -----------------------------------
-angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout',
-			function ($scope, $rootScope, $state, $timeout) {
-				$rootScope.menu = MENU;
-				console.log($rootScope.menu)
- } ]);
+angular.module("homeApp").service('Authorization', function($state) {
 
-angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
+  this.authorized = false;
+  this.memorizedState = null;
+
+  var
+  clear = function() {
+    this.authorized = false;
+    this.memorizedState = null;
+  },
+
+  go = function(fallback) {
+    this.authorized = true;
+    var targetState = this.memorizedState ? this.memorizedState : fallback;
+    $state.go(targetState);
+  };
+
+  return {
+    authorized: this.authorized,
+    memorizedState: this.memorizedState,
+    clear: clear,
+    go: go
+  };
+})
+
+//------------------------------------- MASTER CONTROLLER -----------------------------------
+
+
+angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', 'Authorization', masterController ]);
+
+function masterController($scope, $rootScope, $state, $timeout, Authorization) {
+
+	$rootScope.menu = MENU;
+
+	$rootScope.$on('$stateChangeStart', function( event, toState, toParams, fromState, fromParams) {
+
+	})
+
+}
+angular.module('homeApp')
+.config(['$stateProvider','$urlRouterProvider',
 	function ($stateProvider,$urlRouterProvider) {
 
 	// ------------------------------------- DEFINIR RUTAS ----------------------------------
 	$urlRouterProvider.otherwise('/');
-
 
 	angular.forEach(PAGES_PRIVATE, function( value, key) {
 
@@ -61,11 +99,33 @@ angular.module('homeApp').config(['$stateProvider','$urlRouterProvider',
 				$scope.data = {
 					params : $stateParams
 				}
-			}
+			},
+			data: {
+		      authorization: true,
+		      redirectTo: 'login'
+		    }
 		});
 
 	});
-}]);
+
+	$stateProvider
+		.state('login', {
+			url : '/login',
+			template : '< login flex layout="row" params="data.params" ng-cloak />',
+			controller: function ($scope, $stateParams) {
+				$scope.data = {
+					params : $stateParams
+				}
+			},
+			data: {
+		      authorization: true,
+		      redirectTo: 'login'
+		    }
+		});
+
+}])
+
+;
 angular.module("homeApp").directive('agregarCliente', agregarclienteController);
 
 //--------------------------------------------------------
@@ -78,7 +138,9 @@ function agregarclienteController() {
 
 		templateUrl : 'pages/clientes/agregarcliente.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', '$stateParams', function($scope, $state, $stateParams) {
+
+			console.log($state.params)
 
 			$scope.goBack = function () {
 				$state.go('clientes');
@@ -125,7 +187,7 @@ function clientesController() {
 			];
 
 			$scope.go = function() {
-				$state.go('agregar-cliente');
+				$state.go('agregar-cliente',{'users':$scope.client_list});
 			}
 
 			$scope.greeting = "Este es el clientes"
@@ -143,37 +205,16 @@ function hogaresController() {
 
 		templateUrl : 'pages/hogares/hogares.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', '$http' , function($scope, $http) {
 
-			$scope.home_list = [
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			},
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			},
-			{
-				'direccion' : 'Calle falsa 123',
-				'fecha_registro' : ' 14 Diciembre 2014 ',
-				'client' : {
-					'nombre' : ' Homero ',
-					'apellido' : 'Simpson',
-					'correo' : 'homerjsimpson@springfield.com'
-				}
-			}
-			];
+			$http({
+				method : 'GET',
+				url : SERVER_ENDPOINT + '/hogar/consultarHogares'
+			}).then(function(response) {
+				$scope.home_list = response.data;
+			}, function(error) {
+				console.log(error);
+			});
 
 			console.log($scope.home_list);
 		}]};
@@ -190,7 +231,8 @@ function homeController() {
 
 		templateUrl : 'pages/home/home.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', '$http', 'Authorization', function($scope, $http, Authorization) {
+
 			$scope.greeting = "Este es el home"
 		}]};
 };
@@ -206,8 +248,16 @@ function loginController() {
 
 		templateUrl : 'pages/login/login.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', 'Authorization', function($scope, Authorization) {
+
+			Authorization.clear();
+
 			$scope.greeting = "Este es el login"
+
+			$scope.login = function() {
+				console.log('mierda')
+				Authorization.go('home');
+			}
 		}]};
 };
 angular.module("homeApp").directive('mapa', mapaController);
@@ -222,7 +272,7 @@ function mapaController() {
 
 		templateUrl : 'pages/mapa/mapa.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', '$timeout', function($scope, $state,$timeout) {
 
 			$scope.greeting = "Aqui va el mapa";
 
@@ -234,6 +284,7 @@ function mapaController() {
 						center: {lat: -34.397, lng: 150.644},
 						zoom: 8
 					});
+					$timeout(function(){document.getElementById('map').setAttribute('height', '80%');}, 100);
 			};
 
 			$scope.showMap();
@@ -255,10 +306,10 @@ function menuController() {
 
 		templateUrl : 'pages/menu/menu.htm',
 
-		controller : [ '$scope', '$state', function($scope, $state) {
+		controller : [ '$scope', '$state', 'Authorization', function($scope, $state, Authorization) {
 
 			$scope.go = function (path) {
-				$state.go(path);
+				Authorization.go(path);
 			};
 
 		}]};
