@@ -16,9 +16,8 @@ function loginController() {
 
 			$scope.greeting = "Este es el login"
 
-			$scope.login = function() {
-				console.log('mierda')
-				Authorization.go('home');
+			$scope.login = function(user) {
+				Authorization.login(user);
 			}
 		}]};
 };

@@ -1,4 +1,4 @@
-var SERVER_ENDPOINT = 'http://192.168.2.114:8090/SmartHomeServer';
+var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente','agregar-hogar']
 
@@ -50,21 +50,64 @@ angular.module("homeApp").service('Authorization', function($state) {
 
   var
   clear = function() {
+  	$http({
+				method : 'POST',
+				url : SERVER_ENDPOINT + '/logout',
+				data : $rootScope.info
+			}).then(function(response) {
+				$rootScope.info = null;
+				sessionStorage.removeItem('session_info');
+				sessionStorage.removeItem('last_state');
+				console.log(response.data)
+			}, function(error) {
+				console.log(error);
+			});
     this.authorized = false;
     this.memorizedState = null;
   },
+  login = function(user) {
+  	if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
+  		$http({
+				method : 'POST',
+				url : SERVER_ENDPOINT + '/login',
+				data : user
+			}).then(function(response) {
+				$rootScope.info = response.data;
+				sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
+				go('home');
+			}, function(error) {
+				console.log(error);
+			});
+	    this.authorized = true;
+	}else{
+		$rootScope.info = sessionStorage.getItem('session_info');
+  		$state.go(sessionStorage.getItem('last_state'))
 
-  go = function(fallback) {
-    this.authorized = true;
-    var targetState = this.memorizedState ? this.memorizedState : fallback;
-    $state.go(targetState);
+	}
+	
+  },
+  go = function(fallback){
+
+  	if( sessionStorage.getItem('session_info') != null){
+  		console.log('va por aqui');
+  		this.authorized = true;
+  		if ($rootScope.info != sessionStorage.getItem('session_info')) {
+  			$rootScope.info = sessionStorage.getItem('session_info');
+  		}
+  		sessionStorage.setItem('last_state', fallback);
+    	$state.go(fallback);
+  	}else{
+  		$state.go('/');
+  	}
+
   };
 
   return {
     authorized: this.authorized,
     memorizedState: this.memorizedState,
     clear: clear,
-    go: go
+    go: go,
+    login : login
   };
 })
 
@@ -76,10 +119,12 @@ angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope
 function masterController($scope, $rootScope, $state, $timeout, Authorization) {
 
 	$rootScope.menu = MENU;
-
-	$rootScope.$on('$stateChangeStart', function( event, toState, toParams, fromState, fromParams) {
-
-	})
+	console.log("Sesion : " + sessionStorage.getItem('session_info'));
+	if (sessionStorage.getItem('last_state')) {
+  		Authorization.go(sessionStorage.getItem('last_state'))
+	} else {
+		Authorization.go('/');
+	}	
 
 }
 angular.module('homeApp')
@@ -389,9 +434,8 @@ function loginController() {
 
 			$scope.greeting = "Este es el login"
 
-			$scope.login = function() {
-				console.log('mierda')
-				Authorization.go('home');
+			$scope.login = function(user) {
+				Authorization.login(user);
 			}
 		}]};
 };
@@ -479,5 +523,56 @@ function visitasController() {
 
 		controller : [ '$scope', function($scope) {
 			$scope.greeting = "Este es el visitas"
-		}]};
+			$scope.listaVisitasInstalacion = [];
+			$scope.listaVisitasRetiro = [];
+			$scope.listaVisitasFinalizadas = [];
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasInstalacion = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+				}).then(function(response) {
+					$scope.listaVisitasInstalacion = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasRetiro = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasRetiro',
+				}).then(function(response) {
+					$scope.listaVisitasRetiro = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasFinalizadas = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasFinalizadas',
+				}).then(function(response) {
+					$scope.listaVisitasFinalizadas = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+			// ###########################################################################################
+
+			$scope.consultarListaVisitasInstalacion();
+			$scope.consultarListaVisitasFinalizadas();
+			$scope.consultarListaVisitasRetiro();
+		} ]
+	};
 };
