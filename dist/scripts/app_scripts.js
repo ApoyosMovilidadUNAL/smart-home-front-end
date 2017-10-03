@@ -1,4 +1,4 @@
-var SERVER_ENDPOINT = 'http://192.168.0.7:8090/SmartHomeServer';
+var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 
@@ -51,7 +51,8 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 				data : $rootScope.info
 			}).then(function(response) {
 				$rootScope.info = null;
-				sessionStorage.removeItem('session_info') 
+				sessionStorage.removeItem('session_info');
+				sessionStorage.removeItem('last_state');
 				console.log(response.data)
 			}, function(error) {
 				console.log(error);
@@ -60,39 +61,49 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
     this.memorizedState = null;
 
   },
-
-  go = function(fallback) {
+  login = function(user) {
   	if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
   		$http({
 				method : 'POST',
 				url : SERVER_ENDPOINT + '/login',
-				data : {
-					"usuario" : "jmhurtadoc",
-					"clave" : "93022506968"
-				}
+				data : user
 			}).then(function(response) {
 				$rootScope.info = response.data;
 				sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
-				console.log(sessionStorage.getItem('session_info'));
+				go('home');
 			}, function(error) {
 				console.log(error);
 			});
 	    this.authorized = true;
 	}else{
-		console.log("va por aca")
 		$rootScope.info = sessionStorage.getItem('session_info');
-		console.log($rootScope.info)
+  		$state.go(sessionStorage.getItem('last_state'))
 
 	}
-	var targetState = this.memorizedState ? this.memorizedState : fallback;
-    $state.go(targetState);
+	
+  },
+  go = function(fallback){
+
+  	if( sessionStorage.getItem('session_info') != null){
+  		console.log('va por aqui');
+  		this.authorized = true;
+  		if ($rootScope.info != sessionStorage.getItem('session_info')) {
+  			$rootScope.info = sessionStorage.getItem('session_info');
+  		}
+  		sessionStorage.setItem('last_state', fallback);
+    	$state.go(fallback);
+  	}else{
+  		$state.go('/');
+  	}
+
   };
 
   return {
     authorized: this.authorized,
     memorizedState: this.memorizedState,
     clear: clear,
-    go: go
+    go: go,
+    login : login
   };
 })
 
@@ -104,17 +115,12 @@ angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope
 function masterController($scope, $rootScope, $state, $timeout, $cookies, Authorization) {
 
 	$rootScope.menu = MENU;
-	
-
-	$rootScope.$on('$stateChangeStart', function( event, toState, toParams, fromState, fromParams) {
-
-		if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
-			$state.go(toState)
-		} else {
-			Sstate.go('login')
-		}
-
-	})
+	console.log("Sesion : " + sessionStorage.getItem('session_info'));
+	if (sessionStorage.getItem('last_state')) {
+  		Authorization.go(sessionStorage.getItem('last_state'))
+	} else {
+		Authorization.go('/');
+	}	
 
 }
 angular.module('homeApp')
@@ -146,6 +152,32 @@ angular.module('homeApp')
 }])
 
 ;
+angular.module("homeApp").directive('hogares', hogaresController);
+
+//--------------------------------------------------------
+
+function hogaresController() {
+
+	return {
+
+		scope: {},
+
+		templateUrl : 'pages/hogares/hogares.htm',
+
+		controller : [ '$scope', '$http' , function($scope, $http) {
+
+			$http({
+				method : 'GET',
+				url : SERVER_ENDPOINT + '/hogar/consultarHogares'
+			}).then(function(response) {
+				$scope.home_list = response.data;
+			}, function(error) {
+				console.log(error);
+			});
+
+			console.log($scope.home_list);
+		}]};
+};
 angular.module("homeApp").directive('agregarCliente', agregarclienteController);
 
 //--------------------------------------------------------
@@ -213,32 +245,6 @@ function clientesController() {
 			$scope.greeting = "Este es el clientes"
 		}]};
 };
-angular.module("homeApp").directive('hogares', hogaresController);
-
-//--------------------------------------------------------
-
-function hogaresController() {
-
-	return {
-
-		scope: {},
-
-		templateUrl : 'pages/hogares/hogares.htm',
-
-		controller : [ '$scope', '$http' , function($scope, $http) {
-
-			$http({
-				method : 'GET',
-				url : SERVER_ENDPOINT + '/hogar/consultarHogares'
-			}).then(function(response) {
-				$scope.home_list = response.data;
-			}, function(error) {
-				console.log(error);
-			});
-
-			console.log($scope.home_list);
-		}]};
-};
 angular.module("homeApp").directive('home', homeController);
 
 //--------------------------------------------------------
@@ -272,8 +278,8 @@ function loginController() {
 
 			$scope.greeting = "Este es el login"
 
-			$scope.login = function() {
-				Authorization.go('home');
+			$scope.login = function(user) {
+				Authorization.login(user);
 			}
 		}]};
 };
@@ -388,7 +394,7 @@ function visitasController() {
 				$http({
 					cache : false,
 					method : 'GET',
-					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasRetiro',
 				}).then(function(response) {
 					$scope.listaVisitasRetiro = response.data;
 					console.log($scope.listaHogarServicio)
@@ -402,7 +408,7 @@ function visitasController() {
 				$http({
 					cache : false,
 					method : 'GET',
-					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasFinalizadas',
 				}).then(function(response) {
 					$scope.listaVisitasFinalizadas = response.data;
 					console.log($scope.listaHogarServicio)
@@ -413,7 +419,8 @@ function visitasController() {
 			// ###########################################################################################
 
 			$scope.consultarListaVisitasInstalacion();
-
+			$scope.consultarListaVisitasFinalizadas();
+			$scope.consultarListaVisitasRetiro();
 		} ]
 	};
 };
