@@ -2,6 +2,20 @@ angular.module("homeApp").directive('clientes', clientesController);
 
 //--------------------------------------------------------
 
+
+angular.module("homeApp").service('variableCliente', function() {
+    var varCliente = {};
+
+    return {
+        getVarCliente: function() {
+            return varCliente;
+        },
+        setVarCliente: function(value) {
+        	varCliente = value;
+        }
+    };
+});
+
 function clientesController() {
 
 	return {
@@ -10,7 +24,7 @@ function clientesController() {
 
 		templateUrl : 'pages/clientes/clientes.htm',
 
-		controller : [ '$scope', '$mdDialog', '$state','$http', function($scope, $mdDialog, $state,$http) {
+		controller : [ '$scope', '$mdDialog', '$state','$http','variableCliente', function($scope, $mdDialog, $state,$http, variableCliente) {
 
 			
 			$http({
@@ -45,6 +59,17 @@ function clientesController() {
 			$scope.go = function() {
 				$state.go('agregar-cliente',{'users':$scope.client_list});
 			}
+			
+			$scope.goAgregarHogar = function(cliente) {
+				console.log("agregar hogar");
+				console.log(cliente);
+				variableCliente.setVarCliente(cliente);
+				console.log(variableCliente.getVarCliente());
+				$state.go('agregar-hogar');
+				
+			}
+			
+			
 
 			$scope.greeting = "Este es el clientes"
 		}]};
