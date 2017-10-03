@@ -2,11 +2,13 @@
   <md-card flex class="md-padding"> 
     <md-card-title> 
       <md-card-title-text layout="row" layout-align="start center"> 
-        <span class="md-headline"><h1>Hogares</h1></span>  
+        <span class="md-headline"><h1>Hogares de Cliente</h1></span>
+        <span><h2>{{cliente.nombre}}</h2></span>  
         <span flex ></span> 
         <span > 
           <md-card-actions layout="row" layout-align="end center"> 
             <md-button class="md-raised" ng-click="goBackHogar()" >Volver</md-button> 
+            <md-button id="idBtnConsultarHogar" class="md-raised" ng-click="consultarHogares()" >Consultar Hogares</md-button>
             <md-button id="idBtnAgregarCliente" ng-click="agregarHogar()" aria-label="description"> 
             <i class="material-icons" style="font-size : 48px" >add_circle</i> 
           </md-button> 
@@ -29,11 +31,11 @@
         <div layout-gt-xs="row" ng-hide="ocultarAgregarHogar"> 
           <md-input-container class="md-block" flex-gt-xs> 
             <label>Direccion</label> 
-            <input id="idDireccionHogar" ng-model="user.nombre" > 
+            <input id="idDireccionHogar" ng-model="hogar.direccion"> 
           </md-input-container> 
           <md-input-container class="md-block" flex-gt-xs> 
             <label>Ubicacion</label> 
-            <input id="idUbicacionHogar" ng-model="user.apellido" > 
+            <input id="idUbicacionHogar" ng-model="hogar.ubicacion"> 
           </md-input-container> 
            
           <span > 
@@ -43,6 +45,16 @@
            
           </span> 
         </div> 
+        
+       	<div flex layout-fill layout="column">
+			<md-button class="md-raised" aria-label="description" ng-repeat="hogar in home_list" layout="row">
+				<div layout="row" layout-align="start center">
+     					<i flex="5" class="material-icons">person_pickup</i>
+					<p flex="50" layout-align="start" style="text-align: left" >{{ hogar.direccion }}</p>
+					<span flex ></span>
+				</div>
+			</md-button>
+		</div>
          
          
       </form> 

@@ -5,6 +5,7 @@ angular.module("homeApp").directive('clientes', clientesController);
 
 angular.module("homeApp").service('variableCliente', function() {
     var varCliente = {};
+    var listHogares = [];
 
     return {
         getVarCliente: function() {
@@ -12,6 +13,12 @@ angular.module("homeApp").service('variableCliente', function() {
         },
         setVarCliente: function(value) {
         	varCliente = value;
+        },
+        getListHogares: function() {
+            return listHogares;
+        },
+        setListHogares: function(value) {
+        	listHogares = value;
         }
     };
 });
@@ -27,14 +34,16 @@ function clientesController() {
 		controller : [ '$scope', '$mdDialog', '$state','$http','variableCliente', function($scope, $mdDialog, $state,$http, variableCliente) {
 
 			
-			$http({
-				method : 'GET',
-				url : SERVER_ENDPOINT + '/cliente/consultarClientes'
-			}).then(function(response) {
-				$scope.client_list = response.data;
-			}, function(error) {
-				console.log(error);
-			});
+			$scope.load = function(){
+				$http({
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/cliente/consultarClientes'
+				}).then(function(response) {
+					$scope.client_list = response.data;
+				}, function(error) {
+					console.log(error);
+				});
+			}
 
 //			console.log($scope.home_list);
 //			
@@ -62,14 +71,30 @@ function clientesController() {
 			
 			$scope.goAgregarHogar = function(cliente) {
 				console.log("agregar hogar");
-				console.log(cliente);
+				//console.log(cliente);
 				variableCliente.setVarCliente(cliente);
-				console.log(variableCliente.getVarCliente());
+				//console.log(variableCliente.getVarCliente());
+				//console.log(cliente.id);
+				
+				$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/hogar/consultarHogarPorCliente',
+					data: cliente.id
+				}).then(function(response) {
+					$scope.hogares_list = response.data;
+					//console.log($scope.hogares_list = response.data);
+					
+					variableCliente.setListHogares(response.data);
+					console.log(variableCliente.getListHogares());
+				}, function(error) {
+					console.log(error);
+				});
+				
 				$state.go('agregar-hogar');
 				
 			}
 			
-			
+			$scope.load();
 
 			$scope.greeting = "Este es el clientes"
 		}]};
