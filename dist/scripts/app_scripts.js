@@ -1,6 +1,6 @@
 var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
-var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
+var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente', 'agregar-hogar']
 
 
 var MENU = [
@@ -38,7 +38,7 @@ var MENU = [
 ];
 angular.module("homeApp",["ui.router", 'ngCookies', 'ngMessages','ngMaterial']);
 
-angular.module("homeApp").service('Authorization', function($state, $rootScope, $http, $cookies) {
+angular.module("homeApp").service('Authorization', function($state, $rootScope, $http) {
 
   this.authorized = false;
   this.memorizedState = null;
@@ -59,10 +59,9 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 			});
     this.authorized = false;
     this.memorizedState = null;
-
   },
   login = function(user) {
-  	if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
+  	if (sessionStorage.getItem('session_info') == null ) {
   		$http({
 				method : 'POST',
 				url : SERVER_ENDPOINT + '/login',
@@ -110,17 +109,12 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 //------------------------------------- MASTER CONTROLLER -----------------------------------
 
 
-angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', '$cookies', 'Authorization', masterController ]);
+angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', 'Authorization', masterController ]);
 
-function masterController($scope, $rootScope, $state, $timeout, $cookies, Authorization) {
+function masterController($scope, $rootScope, $state, $timeout, Authorization) {
 
 	$rootScope.menu = MENU;
-	console.log("Sesion : " + sessionStorage.getItem('session_info'));
-	if (sessionStorage.getItem('last_state')) {
-  		Authorization.go(sessionStorage.getItem('last_state'))
-	} else {
-		Authorization.go('/');
-	}	
+	
 
 }
 angular.module('homeApp')
@@ -164,7 +158,7 @@ function agregarclienteController() {
 
 		templateUrl : 'pages/clientes/agregarcliente.htm',
 
-		controller : [ '$scope', '$state', '$stateParams', function($scope, $state, $stateParams) {
+		controller : [ '$scope', '$state', '$stateParams','$http','$rootScope', function($scope, $state, $stateParams,$http,$rootScope) {
 
 			console.log($state.params)
 
@@ -173,6 +167,19 @@ function agregarclienteController() {
 			}
 
 			$scope.save = function () {
+				console.log($scope.user);
+				
+				$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/cliente/crearCliente',
+					data: $scope.user
+				}).then(function(response) {
+					//console.log(response);
+					
+				}, function(error) {
+					console.log(error);
+				});
+				
 				$state.go('clientes');
 			}
 
@@ -184,6 +191,27 @@ angular.module("homeApp").directive('clientes', clientesController);
 
 //--------------------------------------------------------
 
+
+angular.module("homeApp").service('variableCliente', function() {
+    var varCliente = {};
+    var listHogares = [];
+
+    return {
+        getVarCliente: function() {
+            return varCliente;
+        },
+        setVarCliente: function(value) {
+        	varCliente = value;
+        },
+        getListHogares: function() {
+            return listHogares;
+        },
+        setListHogares: function(value) {
+        	listHogares = value;
+        }
+    };
+});
+
 function clientesController() {
 
 	return {
@@ -192,32 +220,133 @@ function clientesController() {
 
 		templateUrl : 'pages/clientes/clientes.htm',
 
-		controller : [ '$scope', '$mdDialog', '$state', function($scope, $mdDialog, $state) {
+		controller : [ '$scope', '$mdDialog', '$state','$http','variableCliente', function($scope, $mdDialog, $state,$http, variableCliente) {
 
-			$scope.client_list = [
-			{
-				'nombre' : 'Jhader Manuel',
-				'apellido' : 'Hurtado',
-				'identificacion' : 123456789
-			},
-			{
-				'nombre' : 'Omar Sneyder',
-				'apellido' : 'Eraso',
-				'identificacion' : 123456789
-			},
-			{
-				'nombre' : 'Jesus David',
-				'apellido' : 'Monroy',
-				'identificacion' : 123456789
+			
+			$scope.load = function(){
+				$http({
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/cliente/consultarClientes'
+				}).then(function(response) {
+					$scope.client_list = response.data;
+				}, function(error) {
+					console.log(error);
+				});
 			}
-			];
+
+//			console.log($scope.home_list);
+//			
+//			$scope.client_list = [
+//			{
+//				'nombre' : 'Jhader Manuel',
+//				'apellido' : 'Hurtado',
+//				'identificacion' : 123456789
+//			},
+//			{
+//				'nombre' : 'Omar Sneyder',
+//				'apellido' : 'Eraso',
+//				'identificacion' : 123456789
+//			},
+//			{
+//				'nombre' : 'Jesus David',
+//				'apellido' : 'Monroy',
+//				'identificacion' : 123456789
+//			}
+//			];
 
 			$scope.go = function() {
 				$state.go('agregar-cliente',{'users':$scope.client_list});
 			}
+			
+			$scope.goAgregarHogar = function(cliente) {
+				console.log("agregar hogar");
+				//console.log(cliente);
+				variableCliente.setVarCliente(cliente);
+				//console.log(variableCliente.getVarCliente());
+				//console.log(cliente.id);
+				
+				$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/hogar/consultarHogarPorCliente',
+					data: cliente.id
+				}).then(function(response) {
+					$scope.hogares_list = response.data;
+					//console.log($scope.hogares_list = response.data);
+					
+					variableCliente.setListHogares(response.data);
+					console.log(variableCliente.getListHogares());
+				}, function(error) {
+					console.log(error);
+				});
+				
+				$state.go('agregar-hogar');
+				
+			}
+			
+			$scope.load();
 
 			$scope.greeting = "Este es el clientes"
 		}]};
+};
+angular.module("homeApp").directive('agregarHogar', agregarhogarController); 
+ 
+//-------------------------------------------------------- 
+ 
+function agregarhogarController() { 
+ 
+  return { 
+ 
+    scope: {}, 
+ 
+    templateUrl : 'pages/hogares/agregarhogar.htm', 
+ 
+    controller : [ '$scope', '$state', '$stateParams','$http','variableCliente', function($scope, $state, $stateParams,$http,variableCliente) { 
+ 
+      $scope.consultarHogares=function(){
+    	  console.log("hola");
+    	  console.log(variableCliente.getListHogares()); 
+    	  $scope.home_list=variableCliente.getListHogares();
+      }
+      //console.log(variableCliente.getListHogares()); 
+      $scope.ocultarAgregarHogar = true; 
+ 
+      $scope.goBackHogar = function () { 
+         
+    	  $state.go('clientes');
+      } 
+ 
+      $scope.guardarHogar = function () { 
+        
+        var cliente=variableCliente.getVarCliente(); 
+        $scope.hogar["ht_clente_id"] =cliente.id;
+        
+        $http({ 
+          method : 'POST', 
+          url : SERVER_ENDPOINT + '/hogar/crearHogarCliente', 
+          data: $scope.hogar
+        }).then(function(response) { 
+        	
+        }, function(error) { 
+          
+        }); 
+         
+        $state.go('clientes'); 
+      } 
+       
+      $scope.agregarHogar= function(){ 
+        
+        if($scope.ocultarAgregarHogar==true){
+        	$scope.ocultarAgregarHogar = false; 
+        } else{
+        	$scope.ocultarAgregarHogar = true;
+        }
+      } 
+       
+      
+ 
+      $scope.greeting = "Este es el clientes"; 
+ 
+    }]}; 
 };
 angular.module("homeApp").directive('hogares', hogaresController);
 

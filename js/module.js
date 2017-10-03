@@ -1,6 +1,6 @@
 angular.module("homeApp",["ui.router", 'ngCookies', 'ngMessages','ngMaterial']);
 
-angular.module("homeApp").service('Authorization', function($state, $rootScope, $http, $cookies) {
+angular.module("homeApp").service('Authorization', function($state, $rootScope, $http) {
 
   this.authorized = false;
   this.memorizedState = null;
@@ -21,10 +21,9 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 			});
     this.authorized = false;
     this.memorizedState = null;
-
   },
   login = function(user) {
-  	if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
+  	if (sessionStorage.getItem('session_info') == null ) {
   		$http({
 				method : 'POST',
 				url : SERVER_ENDPOINT + '/login',
@@ -72,16 +71,11 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 //------------------------------------- MASTER CONTROLLER -----------------------------------
 
 
-angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', '$cookies', 'Authorization', masterController ]);
+angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', 'Authorization', masterController ]);
 
-function masterController($scope, $rootScope, $state, $timeout, $cookies, Authorization) {
+function masterController($scope, $rootScope, $state, $timeout, Authorization) {
 
 	$rootScope.menu = MENU;
-	console.log("Sesion : " + sessionStorage.getItem('session_info'));
-	if (sessionStorage.getItem('last_state')) {
-  		Authorization.go(sessionStorage.getItem('last_state'))
-	} else {
-		Authorization.go('/');
-	}	
+	
 
 }

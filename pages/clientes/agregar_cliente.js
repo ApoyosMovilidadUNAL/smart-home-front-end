@@ -10,7 +10,7 @@ function agregarclienteController() {
 
 		templateUrl : 'pages/clientes/agregarcliente.htm',
 
-		controller : [ '$scope', '$state', '$stateParams', function($scope, $state, $stateParams) {
+		controller : [ '$scope', '$state', '$stateParams','$http','$rootScope', function($scope, $state, $stateParams,$http,$rootScope) {
 
 			console.log($state.params)
 
@@ -19,6 +19,19 @@ function agregarclienteController() {
 			}
 
 			$scope.save = function () {
+				console.log($scope.user);
+				
+				$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/cliente/crearCliente',
+					data: $scope.user
+				}).then(function(response) {
+					//console.log(response);
+					
+				}, function(error) {
+					console.log(error);
+				});
+				
 				$state.go('clientes');
 			}
 
