@@ -34,7 +34,7 @@
 
 		<!-- LOGIN -->
 
-		<div layout="column" ng-if="$root.info == null" >
+		<div layout="column" ng-if="Authorization.authorized" >
 
 			<div layout="row" >
 				<login />
@@ -46,7 +46,7 @@
 		<!-- LOGGED USER -->
 
 
-		<div layout="column" ng-if="$root.info != null" >
+		<div layout="column" ng-if="!Authorization.authorized" >
 
 			<!-- MENU -->
 
