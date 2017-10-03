@@ -35,7 +35,7 @@ function visitasController() {
 				$http({
 					cache : false,
 					method : 'GET',
-					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasRetiro',
 				}).then(function(response) {
 					$scope.listaVisitasRetiro = response.data;
 					console.log($scope.listaHogarServicio)
@@ -49,7 +49,7 @@ function visitasController() {
 				$http({
 					cache : false,
 					method : 'GET',
-					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasFinalizadas',
 				}).then(function(response) {
 					$scope.listaVisitasFinalizadas = response.data;
 					console.log($scope.listaHogarServicio)
@@ -60,7 +60,8 @@ function visitasController() {
 			// ###########################################################################################
 
 			$scope.consultarListaVisitasInstalacion();
-
+			$scope.consultarListaVisitasFinalizadas();
+			$scope.consultarListaVisitasRetiro();
 		} ]
 	};
 };
