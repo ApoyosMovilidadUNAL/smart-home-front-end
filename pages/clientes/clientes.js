@@ -35,6 +35,7 @@ function clientesController() {
 
 			
 			$scope.load = function(){
+				console.log("desde load");
 				$http({
 					method : 'GET',
 					url : SERVER_ENDPOINT + '/cliente/consultarClientes'
@@ -95,6 +96,7 @@ function clientesController() {
 			}
 			
 			$scope.load();
+			console.log("hola desde cliente");
 
 			$scope.greeting = "Este es el clientes"
 		}]};

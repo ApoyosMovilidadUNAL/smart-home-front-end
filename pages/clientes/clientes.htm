@@ -4,7 +4,9 @@
 			<md-card-title-text layout="row" layout-align="start center">
 				<span class="md-headline"><h1>Clientes</h1></span>
 				<span flex ></span>
+				<md-button id ="idBtnConsultarClienetes"class="md-raised" ng-click="load()" >Consultar</md-button>
 				<span >
+					
 					<md-button id="botonAgregarCliente" ng-click="go()" aria-label="description">
 						<i class="material-icons" style="font-size : 48px" >add_circle</i>
 					</md-button>
@@ -21,11 +23,11 @@
 				<md-button class="md-raised" aria-label="description" ng-repeat="client in client_list" layout="row">
 					<div layout="row" layout-align="start center">
       					<i flex="5" class="material-icons">person_pickup</i>
-						<p flex="50" layout-align="start" style="text-align: left" >{{ client.nombre +" "+client.apellido}}</p>
+						<p display="block" flex="50" layout-align="start" style="text-align: left" >{{ client.nombre +" "+client.apellido}}</p>
 						
 						<span flex ></span>
 						<span >
-							<md-button ng-click="goAgregarHogar(client)" aria-label="description">
+							<md-button id="idBtnAgregarHogar" ng-click="goAgregarHogar(client)" aria-label="description">
 								<i class="material-icons" style="font-size : 48px" >home</i>
 							</md-button>
 						</span>
@@ -38,3 +40,4 @@
 		</md-card-actions>
 	</md-card>
 </md-content>
+
