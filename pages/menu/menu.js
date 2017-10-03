@@ -16,5 +16,9 @@ function menuController() {
 				Authorization.go(path);
 			};
 
+			$scope.logout = function() {
+				Authorization.clear()
+			}
+
 		}]};
 };

@@ -1,4 +1,4 @@
-var SERVER_ENDPOINT = 'http://192.168.2.116:8090/SmartHomeServer';
+var SERVER_ENDPOINT = 'http://192.168.0.7:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente']
 
@@ -34,29 +34,57 @@ var MENU = [
 		'name' : 'Visitas',
 		'icon' : 'flight_takeoff',
 		'path' : 'visitas'
-	},
-	{
-		'name' : 'Salir',
-		'icon' : 'exit_to_app',
-		'path' : 'login'
 	}
 ];
 angular.module("homeApp",["ui.router", 'ngCookies', 'ngMessages','ngMaterial']);
 
-angular.module("homeApp").service('Authorization', function($state) {
+angular.module("homeApp").service('Authorization', function($state, $rootScope, $http, $cookies) {
 
   this.authorized = false;
   this.memorizedState = null;
 
   var
   clear = function() {
+  	$http({
+				method : 'POST',
+				url : SERVER_ENDPOINT + '/logout',
+				data : $rootScope.info
+			}).then(function(response) {
+				$rootScope.info = null;
+				sessionStorage.removeItem('session_info') 
+				console.log(response.data)
+			}, function(error) {
+				console.log(error);
+			});
     this.authorized = false;
     this.memorizedState = null;
+
   },
 
   go = function(fallback) {
-    this.authorized = true;
-    var targetState = this.memorizedState ? this.memorizedState : fallback;
+  	if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
+  		$http({
+				method : 'POST',
+				url : SERVER_ENDPOINT + '/login',
+				data : {
+					"usuario" : "jmhurtadoc",
+					"clave" : "93022506968"
+				}
+			}).then(function(response) {
+				$rootScope.info = response.data;
+				sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
+				console.log(sessionStorage.getItem('session_info'));
+			}, function(error) {
+				console.log(error);
+			});
+	    this.authorized = true;
+	}else{
+		console.log("va por aca")
+		$rootScope.info = sessionStorage.getItem('session_info');
+		console.log($rootScope.info)
+
+	}
+	var targetState = this.memorizedState ? this.memorizedState : fallback;
     $state.go(targetState);
   };
 
@@ -71,13 +99,20 @@ angular.module("homeApp").service('Authorization', function($state) {
 //------------------------------------- MASTER CONTROLLER -----------------------------------
 
 
-angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', 'Authorization', masterController ]);
+angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope', '$state', '$timeout', '$cookies', 'Authorization', masterController ]);
 
-function masterController($scope, $rootScope, $state, $timeout, Authorization) {
+function masterController($scope, $rootScope, $state, $timeout, $cookies, Authorization) {
 
 	$rootScope.menu = MENU;
+	
 
 	$rootScope.$on('$stateChangeStart', function( event, toState, toParams, fromState, fromParams) {
+
+		if (sessionStorage.getItem('session_info') == null || typeof(sessionStorage.getItem('session_info')) == 'undefined' ) {
+			$state.go(toState)
+		} else {
+			Sstate.go('login')
+		}
 
 	})
 
@@ -107,21 +142,6 @@ angular.module('homeApp')
 		});
 
 	});
-
-	$stateProvider
-		.state('login', {
-			url : '/login',
-			template : '< login flex layout="row" params="data.params" ng-cloak />',
-			controller: function ($scope, $stateParams) {
-				$scope.data = {
-					params : $stateParams
-				}
-			},
-			data: {
-		      authorization: true,
-		      redirectTo: 'login'
-		    }
-		});
 
 }])
 
@@ -250,12 +270,9 @@ function loginController() {
 
 		controller : [ '$scope', 'Authorization', function($scope, Authorization) {
 
-			Authorization.clear();
-
 			$scope.greeting = "Este es el login"
 
 			$scope.login = function() {
-				console.log('mierda')
 				Authorization.go('home');
 			}
 		}]};
@@ -312,6 +329,10 @@ function menuController() {
 				Authorization.go(path);
 			};
 
+			$scope.logout = function() {
+				Authorization.clear()
+			}
+
 		}]};
 };
 angular.module("homeApp").directive('usuarios', usuariosController);
@@ -332,17 +353,67 @@ function usuariosController() {
 };
 angular.module("homeApp").directive('visitas', visitasController);
 
-//--------------------------------------------------------
+// --------------------------------------------------------
 
 function visitasController() {
 
 	return {
 
-		scope: {},
+		scope : {},
 
 		templateUrl : 'pages/visitas/visitas.htm',
 
-		controller : [ '$scope', function($scope) {
+		controller : [ '$scope', '$http', function($scope, $http) {
 			$scope.greeting = "Este es el visitas"
-		}]};
+			$scope.listaVisitasInstalacion = [];
+			$scope.listaVisitasRetiro = [];
+			$scope.listaVisitasFinalizadas = [];
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasInstalacion = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+				}).then(function(response) {
+					$scope.listaVisitasInstalacion = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasRetiro = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+				}).then(function(response) {
+					$scope.listaVisitasRetiro = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+
+			// ###########################################################################################
+			$scope.consultarListaVisitasFinalizadas = function() {
+				$http({
+					cache : false,
+					method : 'GET',
+					url : SERVER_ENDPOINT + '/servicio/consultarVisitasNuevas',
+				}).then(function(response) {
+					$scope.listaVisitasFinalizadas = response.data;
+					console.log($scope.listaHogarServicio)
+				}, function(error) {
+					console.log(error);
+				});
+			};
+			// ###########################################################################################
+
+			$scope.consultarListaVisitasInstalacion();
+
+		} ]
+	};
 };
