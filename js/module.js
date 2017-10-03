@@ -4,7 +4,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 
   this.authorized = false;
   this.memorizedState = null;
-
+  // -------------------------------------------------------------------------------------------------------------------
   var
   clear = function() {
   	$http({
