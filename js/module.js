@@ -29,17 +29,23 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 				url : SERVER_ENDPOINT + '/login',
 				data : user
 			}).then(function(response) {
-				$rootScope.info = response.data;
-				sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
-				go('home');
+				console.log(response)
+				if (response.data.token != null) {
+				    this.authorized = true;
+					$rootScope.info = response.data;
+					sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
+					go('home');
+				}else{
+					Authentication.clear();
+					go('login');
+				}
+				
 			}, function(error) {
 				console.log(error);
 			});
-	    this.authorized = true;
 	}else{
 		$rootScope.info = sessionStorage.getItem('session_info');
   		$state.go(sessionStorage.getItem('last_state'))
-
 	}
 	
   },
@@ -54,7 +60,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   		sessionStorage.setItem('last_state', fallback);
     	$state.go(fallback);
   	}else{
-  		$state.go('/');
+  		$state.go('login');
   	}
 
   };
@@ -76,6 +82,6 @@ angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope
 function masterController($scope, $rootScope, $state, $timeout, Authorization) {
 
 	$rootScope.menu = MENU;
-	
+	Authorization.go('home');
 
 }
