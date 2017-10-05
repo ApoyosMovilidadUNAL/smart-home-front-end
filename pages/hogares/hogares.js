@@ -14,7 +14,7 @@ function hogaresController() {
 
 			$http({
 				method : 'GET',
-				url : SERVER_ENDPOINT + '/hogar/consultarHogares'
+				url : SERVER_ENDPOINT + '/hogar/consultarHogaresInformacion'
 			}).then(function(response) {
 				$scope.home_list = response.data;
 			}, function(error) {
