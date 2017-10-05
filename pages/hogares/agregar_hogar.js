@@ -15,7 +15,22 @@ function agregarhogarController() {
       $scope.consultarHogares=function(){
     	  console.log("hola");
     	  console.log(variableCliente.getListHogares()); 
-    	  $scope.home_list=variableCliente.getListHogares();
+    	  //$scope.home_list=variableCliente.getListHogares();
+    	  var cliente=variableCliente.getVarCliente();
+          	$http({
+	  			method : 'POST',
+	  			url : SERVER_ENDPOINT + '/hogar/consultarHogarPorCliente',
+	  			data: cliente.id
+	  		}).then(function(response) {
+	  			$scope.home_list = response.data;
+	  			//console.log($scope.hogares_list = response.data);
+	  			
+	  			variableCliente.setListHogares(response.data);
+	  			console.log(variableCliente.getListHogares());
+	  		}, function(error) {
+	  			console.log(error);
+	  		});
+           
       }
       //console.log(variableCliente.getListHogares()); 
       $scope.ocultarAgregarHogar = true; 
@@ -35,12 +50,16 @@ function agregarhogarController() {
           url : SERVER_ENDPOINT + '/hogar/crearHogarCliente', 
           data: $scope.hogar
         }).then(function(response) { 
-        	
+        	$scope.consultarHogares();
+        	$scope.ocultarAgregarHogar = true;
+        	$scope.hogar.direccion="";
+        	$scope.hogar.ubicacion="";
         }, function(error) { 
           
         }); 
-         
-        $state.go('clientes'); 
+        
+        
+//        $state.go('clientes'); 
       } 
        
       $scope.agregarHogar= function(){ 
@@ -53,8 +72,10 @@ function agregarhogarController() {
       } 
        
       
+      $scope.consultarHogares();
  
       $scope.greeting = "Este es el clientes"; 
+      
  
     }]}; 
 };
