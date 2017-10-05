@@ -1,55 +1,64 @@
 <md-content flex layout-xs="column" layout="row" layout-fill>
-<md-card flex class="md-padding"> <md-card-title>
-<md-card-title-text> <span class="md-headline"><h1>Visitas</h1></span>
-</md-card-title-text> <md-card-title-media>
-<div class="md-media-lg card-media"></div>
-</md-card-title-media> <md-divider></md-divider> </md-card-title> <md-card-content> 
-<!--  -->
-<div ng-cloak>
-	<md-content> <md-tabs md-dynamic-height md-border-bottom>
-	<md-tab label="Instalacion"> <md-content class="md-padding">
-	<!-- <h1 class="md-display-2">Tab One</h1> -->
-    <md-list>
-      <md-list-item class="md-3-line" ng-repeat="item in listaVisitasInstalacion" >
-        <div class="md-list-item-text">
-        	<h2>{{item.nombreServicio}}</h2>
-          	<h3>{{item.fecha_visita}}</h3>
-          	<h4>{{item.direccion}}</h4>
-          	<p>{{item.nombreCliente}}</p>
-        </div>
-        <!-- <md-button class="md-secondary">Respond</md-button> -->
-        <md-divider ng-if="!$last"></md-divider>
-      </md-list-item>
-    </md-list>
-	</md-content> </md-tab> <md-tab label="Retiro"> <md-content class="md-padding">
-	<!-- <h1 class="md-display-2">Tab Two</h1> -->
-	<md-list>
+  <md-card flex class="md-padding"> 
+    <md-card-title layout-align="row">
+      <md-card-title-text>
+       <span class="md-headline"><h1>Visitas</h1></span>
+        <span flex ></span>
+        <span >
+          <md-button id="botonAgregarCliente" ng-click="go()" aria-label="description">
+            <i class="material-icons" style="font-size : 48px" >add_circle</i>
+          </md-button>
+        </span>
+     </md-card-title-text> 
+     <md-card-title-media>
+      <div class="md-media-lg card-media"></div>
+    </md-card-title-media> <md-divider></md-divider> </md-card-title> <md-card-content> 
+    <!--  -->
+    <div ng-cloak>
+     <md-content> <md-tabs md-dynamic-height md-border-bottom>
+       <md-tab label="Instalacion"> <md-content class="md-padding">
+         <!-- <h1 class="md-display-2">Tab One</h1> -->
+         <md-list>
+          <md-list-item class="md-3-line" ng-repeat="item in listaVisitasInstalacion" >
+            <div class="md-list-item-text">
+             <h2>{{item.nombreServicio}}</h2>
+             <h3>{{item.fecha_visita}}</h3>
+             <h4>{{item.direccion}}</h4>
+             <p>{{item.nombreCliente}}</p>
+           </div>
+           <!-- <md-button class="md-secondary">Respond</md-button> -->
+           <md-divider ng-if="!$last"></md-divider>
+         </md-list-item>
+       </md-list>
+     </md-content> </md-tab> <md-tab label="Retiro"> <md-content class="md-padding">
+     <!-- <h1 class="md-display-2">Tab Two</h1> -->
+     <md-list>
       <md-list-item class="md-3-line" ng-repeat="item in listaVisitasRetiro" >
         <div class="md-list-item-text">
         	<h2>{{item.nombreServicio}}</h2>
-          	<h3>{{item.fecha_visita}}</h3>
-          	<h4>{{item.direccion}}</h4>
-          	<p>{{item.nombreCliente}}</p>
-        </div>
-        <!-- <md-button class="md-secondary">Respond</md-button> -->
-        <md-divider ng-if="!$last"></md-divider>
-      </md-list-item>
-    </md-list>
-	</md-content> </md-tab> <md-tab label="Finalizadas"> <md-content class="md-padding">
-	<!-- <h1 class="md-display-2">Tab Three</h1> -->
-	<md-list>
-      <md-list-item class="md-3-line" ng-repeat="item in listaVisitasFinalizadas" >
-        <div class="md-list-item-text">
-        	<h2>{{item.nombreServicio}}</h2>
-          	<h3>{{item.fecha_visita}}</h3>
-          	<h4>{{item.direccion}}</h4>
-          	<p>{{item.nombreCliente}}</p>
-        </div>
-        <!-- <md-button class="md-secondary">Respond</md-button> -->
-        <md-divider ng-if="!$last"></md-divider>
-      </md-list-item>
-    </md-list>
-	</md-content> </md-tab> </md-tabs> </md-content>
+         <h3>{{item.fecha_visita}}</h3>
+         <h4>{{item.direccion}}</h4>
+         <p>{{item.nombreCliente}}</p>
+       </div>
+       <!-- <md-button class="md-secondary">Respond</md-button> -->
+       <md-divider ng-if="!$last"></md-divider>
+     </md-list-item>
+   </md-list>
+ </md-content> </md-tab> <md-tab label="Finalizadas"> <md-content class="md-padding">
+ <!-- <h1 class="md-display-2">Tab Three</h1> -->
+ <md-list>
+  <md-list-item class="md-3-line" ng-repeat="item in listaVisitasFinalizadas" >
+    <div class="md-list-item-text">
+     <h2>{{item.nombreServicio}}</h2>
+     <h3>{{item.fecha_visita}}</h3>
+     <h4>{{item.direccion}}</h4>
+     <p>{{item.nombreCliente}}</p>
+   </div>
+   <!-- <md-button class="md-secondary">Respond</md-button> -->
+   <md-divider ng-if="!$last"></md-divider>
+ </md-list-item>
+</md-list>
+</md-content> </md-tab> </md-tabs> </md-content>
 </div>
 <!--  --> 
 </md-card-content> <md-card-actions layout="row" layout-align="end center">

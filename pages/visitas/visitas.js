@@ -10,7 +10,7 @@ function visitasController() {
 
 		templateUrl : 'pages/visitas/visitas.htm',
 
-		controller : [ '$scope', '$http', function($scope, $http) {
+		controller : [ '$scope', '$http', '$state', 'Authorization', function($scope, $http, $state, Authorization) {
 			$scope.greeting = "Este es el visitas"
 			$scope.listaVisitasInstalacion = [];
 			$scope.listaVisitasRetiro = [];
@@ -62,6 +62,10 @@ function visitasController() {
 			$scope.consultarListaVisitasInstalacion();
 			$scope.consultarListaVisitasFinalizadas();
 			$scope.consultarListaVisitasRetiro();
+
+			$scope.go = function() {
+				Authorization.go('agregar-visita')
+			}
 		} ]
 	};
 };

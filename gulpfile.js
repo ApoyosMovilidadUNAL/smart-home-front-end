@@ -9,7 +9,8 @@ var gulp = require('gulp'),
 //script paths
 var bowerFiles = ['bower_components/**/angular*.js',
                     'bower_components/angular-ui-router/release/angular-ui-router.js.map',
-                    'bower_components/underscore/underscore.js'],
+                    'bower_components/underscore/underscore.js',
+                    'bower_components/moment/moment.js'],
 	appFiles = ['js/**/*.js', 'pages/**/*.js'],
     jsDest = 'dist/scripts';
 

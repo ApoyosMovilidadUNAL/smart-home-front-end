@@ -1,0 +1,31 @@
+<md-content flex layout-xs="column" layout="row" layout-fill>
+  <md-card flex class="md-padding">
+    <md-card-title>
+      <md-card-title-text> 
+        <span class="md-headline"><h1>Agregar visita</h1></span>
+        <div class="md-media-lg card-media"></div>
+      </md-card-title-media> 
+      <md-divider></md-divider> 
+    </md-card-title> 
+    <md-card-content> 
+
+     <div flex layout='column'>
+       <md-select ng-model="visita.ht_hogar_id" placeholder="Hogar" class="md-no-underline" required md-no-asterisk="false">
+        <md-option ng-repeat="home in home_list" value="{{ home.id }}"> {{ home.direccion }} </md-option>
+      </md-select>
+
+      <md-select ng-model="visita.ht_servicio_id" placeholder="Servicio" class="md-no-underline" required md-no-asterisk="false">
+        <md-option ng-repeat="service in service_list" value="{{ service.id }} "> {{ service.nombre_servicio }} </md-option>
+      </md-select>
+
+      <md-datepicker ng-model="fecha" md-min-date="minDate" md-placeholder="Fecha"></md-datepicker>
+
+      <md-button ng-click="save()" class="md-raised md-primary">Guardar</md-button>
+    </div>
+
+  </md-card-content> 
+  <md-card-actions layout="row" layout-align="end center">
+
+  </md-card-actions> 
+</md-card> 
+</md-content>
