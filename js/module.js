@@ -34,14 +34,16 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 					data : user
 				}).then(function(response) {
 					console.log(response)
-					if (response.data.token != null) {
+					if (response.data.token != null && response.data.token != "") {
 					    this.authorized = true;
 						$rootScope.info = response.data;
 						sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
 						go('home');
 					}else{
+						alert("Usuario o constraseña invalido!")
 						Authentication.clear();
 						go('login');
+						
 					}
 					
 				}, function(error) {
