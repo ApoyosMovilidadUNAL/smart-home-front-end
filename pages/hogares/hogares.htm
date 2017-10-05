@@ -11,13 +11,18 @@
 		</md-card-title>
 		<md-card-content>		
 			<div flex layout-fill layout="column">
-				<md-button class="md-raised" aria-label="description" ng-repeat="home in home_list" layout="row">
-					<div layout="row" layout-align="start center">
-      					<i flex="5" class="material-icons">person_pickup</i>
-						<p flex="50" layout-align="start" style="text-align: left" >{{ home.direccion }}</p>
-						<span flex ></span>
-					</div>
-				</md-button>
+				<md-list flex>
+			        <md-list-item class="md-3-line" ng-repeat="item in home_list" ng-click="null">
+			          <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
+			          <div class="md-list-item-text" layout="column">
+			            <h3>Hogar #{{ item.idHogar }}</h3>
+			            <h4>Cliente: {{ item.nombreCliente }}</h4>
+			            <h3>{{ item.direccion }}</h3>
+			            <p>Registro: {{ item.fecha_registro }}</p>
+			          </div>
+			        </md-list-item>
+			        <md-divider ></md-divider>
+			     </md-list>
 			</div>
 		</md-card-content>
 		<md-card-actions layout="row" layout-align="end center">
