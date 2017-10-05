@@ -7,7 +7,8 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   // -------------------------------------------------------------------------------------------------------------------
   var
   clear = function() {
-  	$http({
+  	if (sessionStorage.getItem('session_info') != null ) {
+  		$http({
 				method : 'POST',
 				url : SERVER_ENDPOINT + '/logout',
 				data : $rootScope.info
@@ -19,30 +20,36 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
 			}, function(error) {
 				console.log(error);
 			});
+  	}
+  	
     this.authorized = false;
     this.memorizedState = null;
   },
   login = function(user) {
   	if (sessionStorage.getItem('session_info') == null ) {
-  		$http({
-				method : 'POST',
-				url : SERVER_ENDPOINT + '/login',
-				data : user
-			}).then(function(response) {
-				console.log(response)
-				if (response.data.token != null) {
-				    this.authorized = true;
-					$rootScope.info = response.data;
-					sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
-					go('home');
-				}else{
-					Authentication.clear();
-					go('login');
-				}
-				
-			}, function(error) {
-				console.log(error);
-			});
+  		if ( typeof(user) != 'undefined' ) {
+  			$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/login',
+					data : user
+				}).then(function(response) {
+					console.log(response)
+					if (response.data.token != null) {
+					    this.authorized = true;
+						$rootScope.info = response.data;
+						sessionStorage.setItem("session_info", JSON.stringify($rootScope.info));
+						go('home');
+					}else{
+						Authentication.clear();
+						go('login');
+					}
+					
+				}, function(error) {
+					console.log(error);
+				});
+  		}
+  		go('login')
+  		
 	}else{
 		$rootScope.info = sessionStorage.getItem('session_info');
   		$state.go(sessionStorage.getItem('last_state'))
@@ -52,12 +59,14 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   go = function(fallback){
 
   	if( sessionStorage.getItem('session_info') != null){
-  		console.log('va por aqui');
   		this.authorized = true;
   		if ($rootScope.info != sessionStorage.getItem('session_info')) {
   			$rootScope.info = sessionStorage.getItem('session_info');
   		}
-  		sessionStorage.setItem('last_state', fallback);
+  		if (sessionStorage.getItem('last_state') != fallback) {
+  			sessionStorage.setItem('last_state', fallback);
+  		}
+  		console.log(sessionStorage.getItem('last_state'));
     	$state.go(fallback);
   	}else{
   		$state.go('login');
@@ -82,6 +91,6 @@ angular.module("homeApp").controller("MasterController", [ '$scope', '$rootScope
 function masterController($scope, $rootScope, $state, $timeout, Authorization) {
 
 	$rootScope.menu = MENU;
-	Authorization.go('home');
+	Authorization.login();
 
 }
