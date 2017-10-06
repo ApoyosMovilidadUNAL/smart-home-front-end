@@ -6,14 +6,14 @@
 			<div layout-gt-xs="row">
 				<md-input-container class="md-block" flex-gt-xs>
 					<label>Usuario</label>
-					<input ng-model="user.usuario" type="text">
+					<input id="usuario" ng-model="user.usuario" type="text">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-xs>
 					<label>Clave</label>
-					<input ng-model="user.clave" type="password">
+					<input id="password" ng-model="user.clave" type="password">
 				</md-input-container>
-      			<md-button  ng-click="login(user)" class="md-raised md-primary">Entrar</md-button>
+      			<md-button id="Entrar" ng-click="login(user)" class="md-raised md-primary">Entrar</md-button>
 			</div>
 		</form>
 	</div>
