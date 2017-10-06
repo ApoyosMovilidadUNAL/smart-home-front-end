@@ -27,7 +27,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   },
   login = function(user) {
   	if (sessionStorage.getItem('session_info') == null ) {
-  		if ( typeof(user) != 'undefined' ) {
+  		if ( typeof(user) != 'undefined' || "is not defined") {
   			$http({
          method : 'POST',
          url : SERVER_ENDPOINT + '/login',
@@ -50,6 +50,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
        console.log(error);
      });
      }
+
      go('login')
      
    }else{

@@ -16,21 +16,21 @@
     <!--  -->
     <div ng-cloak>
      <md-content> <md-tabs md-dynamic-height md-border-bottom>
-       <md-tab label="Instalacion"> <md-content class="md-padding">
+       <md-tab id="Instalacion" label="Instalacion"> <md-content class="md-padding">
          <!-- <h1 class="md-display-2">Tab One</h1> -->
          <md-list>
-          <md-list-item class="md-3-line" ng-repeat="item in listaVisitasInstalacion" >
+          <md-list-item id="Instalacion" class="md-3-line" ng-repeat="item in listaVisitasInstalacion" >
             <div class="md-list-item-text">
              <h2>{{item.nombreServicio}}</h2>
              <h3>{{item.fecha_visita}}</h3>
              <h4>{{item.direccion}}</h4>
              <p>{{item.nombreCliente}}</p>
-           </div>
+            </div>
            <!-- <md-button class="md-secondary">Respond</md-button> -->
            <md-divider ng-if="!$last"></md-divider>
-         </md-list-item>
-       </md-list>
-     </md-content> </md-tab> <md-tab label="Retiro"> <md-content class="md-padding">
+          </md-list-item>
+        </md-list>
+     </md-content> </md-tab> <md-tab id="Retiro" label="Retiro"> <md-content class="md-padding">
      <!-- <h1 class="md-display-2">Tab Two</h1> -->
      <md-list>
       <md-list-item class="md-3-line" ng-repeat="item in listaVisitasRetiro" >
@@ -44,7 +44,7 @@
        <md-divider ng-if="!$last"></md-divider>
      </md-list-item>
    </md-list>
- </md-content> </md-tab> <md-tab label="Finalizadas"> <md-content class="md-padding">
+ </md-content> </md-tab> <md-tab id="Finalizadas" label="Finalizadas"> <md-content class="md-padding">
  <!-- <h1 class="md-display-2">Tab Three</h1> -->
  <md-list>
   <md-list-item class="md-3-line" ng-repeat="item in listaVisitasFinalizadas" >
