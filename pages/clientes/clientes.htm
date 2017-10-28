@@ -5,7 +5,7 @@
 				<span class="md-headline"><h1>Clientes</h1></span>
 				<span flex ></span>
 				<span >
-					<md-button id="botonAgregarCliente" ng-click="go()" aria-label="description">
+					<md-button id="botonAgregarCliente" ng-click="agregarCliente()" aria-label="description">
 						<i class="material-icons" style="font-size : 48px" >add_circle</i>
 					</md-button>
 				</span>
@@ -16,6 +16,36 @@
 			</md-card-title-media>
 			<md-divider></md-divider>
 		</md-card-title>
+		
+		<div layout-gt-xs="row" ng-hide= "ocultarAgregarCliente">
+			
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Nombre</label>
+				<input id="nombre" ng-model="user.nombre" >
+			</md-input-container>
+			
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Apellido</label>
+				<input id="apellido" ng-model="user.apellido" >
+			</md-input-container>
+			
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Identificacion</label>
+				<input id="identificacion" ng-model="user.identificacion" >
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Correo</label>
+				<input id="correo" ng-model="user.correo" >
+			</md-input-container>
+			
+			<span > 
+	          <md-card-actions layout="row" layout-align="end center"> 
+	            <md-button id="idBtnGuardarHogar" class="md-raised md-primary" ng-click="guardarCliente()" >Guardar</md-button> 
+	          </md-card-actions> 
+	           
+	         </span>
+		</div>
+		
 		<md-card-content>
 			<div flex layout-fill layout="column">
 				<md-button class="md-raised" aria-label="description" ng-repeat="client in client_list" layout="row">
