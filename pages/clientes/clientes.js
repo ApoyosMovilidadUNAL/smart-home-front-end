@@ -68,6 +68,36 @@ function clientesController() {
 			$scope.go = function() {
 				$state.go('agregar-cliente',{'users':$scope.client_list});
 			}
+			$scope.ocultarAgregarCliente=true;
+			$scope.agregarCliente=function(){
+				if($scope.ocultarAgregarCliente==true){
+		        	$scope.ocultarAgregarCliente = false; 
+		        } else{
+		        	$scope.ocultarAgregarCliente = true;
+		        }
+			}
+			
+			$scope.guardarCliente = function () {
+				console.log($scope.user);
+				
+				$http({
+					method : 'POST',
+					url : SERVER_ENDPOINT + '/cliente/crearCliente',
+					data: $scope.user
+				}).then(function(response) {
+					//console.log(response);
+					$scope.load();
+					$scope.ocultarAgregarCliente=true;
+					$scope.user.nombre = "";
+					$scope.user.apellido = "";
+					$scope.user.identificacion = "";
+					$scope.user.correo = "";
+				}, function(error) {
+					console.log(error);
+				});
+				
+				$state.go('clientes');
+			}
 			
 			$scope.goAgregarHogar = function(cliente) {
 				console.log("agregar hogar");
