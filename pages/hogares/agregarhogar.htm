@@ -32,12 +32,27 @@
           <md-input-container class="md-block" flex-gt-xs> 
             <label>Direccion</label> 
             <input id="idDireccionHogar" ng-model="hogar.direccion"> 
-          </md-input-container> 
-          <md-input-container class="md-block" flex-gt-xs> 
-            <label>Ubicacion</label> 
-            <input id="idUbicacionHogar" ng-model="hogar.ubicacion"> 
-          </md-input-container> 
-           
+          </md-input-container>
+           <!-------------------------------------------------------------------------------->
+           <md-content flex layout-xs="column" layout="row" layout-fill>
+				<md-card flex class="md-padding">
+					<md-card-title>
+						<md-card-title-text>
+							<span class="md-headline"><h3>Ubicacion</h3></span>
+						</md-card-title-text>
+						<md-card-title-media>
+							<div class="md-media-lg card-media"></div>
+						</md-card-title-media>
+						<md-divider></md-divider>
+					</md-card-title>
+					<md-card-content >		
+			    		<div id="map" style="height: 70%" flex></div>
+					</md-card-content>
+					<md-card-actions layout="row" layout-align="end center">
+					</md-card-actions>
+				</md-card>
+			</md-content>
+           <!-------------------------------------------------------------------------------->
           <span > 
           <md-card-actions layout="row" layout-align="end center"> 
             <md-button id="idBtnGuardarHogar" class="md-raised md-primary" ng-click="guardarHogar()" >Guardar</md-button> 
