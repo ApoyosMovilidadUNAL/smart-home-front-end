@@ -5,6 +5,20 @@ angular.module('homeApp')
 	// ------------------------------------- DEFINIR RUTAS ----------------------------------
 	$urlRouterProvider.otherwise('/');
 
+	$stateProvider
+		.state('login', {
+			url : '/login',
+			template : '<login flex layout="row" params="data.params" ng-cloak class="login-directive"/>',
+			controller: function ($scope, $stateParams) {
+				$scope.data = {
+					params : $stateParams
+				}
+			},
+			data: {
+		      authorization: false,
+		    }
+		});
+
 	angular.forEach(PAGES_PRIVATE, function( value, key) {
 
 		$stateProvider
@@ -23,6 +37,8 @@ angular.module('homeApp')
 		});
 
 	});
+
+	
 
 }])
 
