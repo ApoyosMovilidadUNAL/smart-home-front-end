@@ -3,6 +3,7 @@
 	<title>Home Administration</title>
 
 	<link rel="stylesheet" type="text/css" href="css/angular-material.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<link rel="stylesheet" type="text/css" href="dist/css/material-rules.css">
 
 	<!-- Cargar librerias -->
@@ -22,7 +23,7 @@
 
 	<div id="page"  >
 		
-		<md-toolbar class="md-hue-2">
+		<md-toolbar class="md-hue-2" ng-if="$root.info != null">
 			<div class="md-toolbar-tools">
 				<md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
 				</md-button>
@@ -35,10 +36,10 @@
 
 		<!-- LOGIN -->
 
-		<div layout="column" ng-if="$root.info == null" >
+		<div layout-fill layout="column" ng-if="$root.info == null" >
 
-			<div layout="row" >
-				<login />
+			<div layout="row" layout-fill >
+				<div flex layout-fill layout="row" ui-view ></div>
 			</div>
 			
 		</div>
