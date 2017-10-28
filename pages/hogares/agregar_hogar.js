@@ -94,6 +94,10 @@ function agregarhogarController() {
 					center: {lat: 4.688475, lng: -74.117780},
 					zoom: 12
 				});
+				
+				var input = /** @type {!HTMLInputElement} */(
+			            document.getElementById('idDireccionHogar'));
+				
 //				 This event listener calls addMarker() when the map is clicked.
 				  google.maps.event.addListener(map, 'click', function(event) {
 					setMapOnAll(null);
