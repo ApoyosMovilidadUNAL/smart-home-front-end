@@ -2,6 +2,22 @@ angular.module("homeApp").directive('hogares', hogaresController);
 
 //--------------------------------------------------------
 
+angular.module("homeApp").service('hogarConsumo', function() {
+    var varHogar = {};
+
+    return {
+        getVarHogar: function() {
+            return varHogar;
+        },
+        setVarHogar: function(value) {
+        	varHogar = value;
+        }
+    };
+});
+
+
+//--------------------------------------------------------
+
 function hogaresController() {
 
 	return {
@@ -10,7 +26,7 @@ function hogaresController() {
 
 		templateUrl : 'pages/hogares/hogares.htm',
 
-		controller : [ '$scope', '$http' , function($scope, $http) {
+		controller : [ '$scope', '$http', 'Authorization', 'hogarConsumo', function($scope, $http, Authorization, hogarConsumo) {
 
 			$http({
 				method : 'GET',
@@ -22,5 +38,17 @@ function hogaresController() {
 			});
 
 			console.log($scope.home_list);
+
+
+			$scope.consultarConsumo = function(hogar){
+				console.log(hogar)
+				hogarConsumo.setVarHogar(hogar);
+
+				
+				console.log(hogarConsumo.getVarHogar())
+				Authorization.go('ver-hogar');
+
+			}
+
 		}]};
 };

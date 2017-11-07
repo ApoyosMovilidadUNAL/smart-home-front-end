@@ -27,7 +27,8 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   },
   login = function(user) {
   	if (sessionStorage.getItem('session_info') == null ) {
-  		if ( typeof(user) != 'undefined' || "is not defined") {
+  		if ( typeof(user) != 'undefined' ) {
+        console.log(typeof(user))
   			$http({
          method : 'POST',
          url : SERVER_ENDPOINT + '/login',
@@ -41,7 +42,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
            go('home');
          }else{
           alert("Usuario o constraseña invalido!")
-          Authentication.clear();
+          clear();
           go('login');
           
         }

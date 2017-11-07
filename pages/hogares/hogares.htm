@@ -12,13 +12,15 @@
 		<md-card-content>		
 			<div flex layout-fill layout="column">
 				<md-list flex>
-			        <md-list-item class="md-3-line" ng-repeat="item in home_list" ng-click="null">
-			          <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
-			          <div class="md-list-item-text" layout="column">
-			            <h3>Hogar #{{ item.idHogar }}</h3>
-			            <h4>Cliente: {{ item.nombreCliente }}</h4>
-			            <h3>{{ item.direccion }}</h3>
-			            <p>Registro: {{ item.fecha_registro }}</p>
+			        <md-list-item class="md-3-line" ng-repeat="item in home_list">
+			          <div flex ng-click="consultarConsumo(item)" layout="row">
+						<img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
+						<div class="md-list-item-text" layout="column">
+							<h3>Hogar #{{ item.idHogar }}</h3>
+							<h4>Cliente: {{ item.nombreCliente }}</h4>
+							<h3>{{ item.direccion }}</h3>
+							<p>Registro: {{ item.fecha_registro }}</p>
+						</div>
 			          </div>
 			        </md-list-item>
 			        <md-divider ></md-divider>

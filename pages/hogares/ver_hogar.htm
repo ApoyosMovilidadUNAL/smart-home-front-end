@@ -1,0 +1,24 @@
+<md-content flex layout-xs="column" layout="row" layout-fill>
+	<md-card flex class="md-padding">
+		<md-card-title>
+			<md-card-title-text>
+				<span class="md-headline"><h1>Consumo Hogar #{{ hogar.idHogar }} </h1></span>
+			</md-card-title-text>
+			<md-card-title-media>
+				<div class="md-media-lg card-media"></div>
+			</md-card-title-media>
+			<md-divider></md-divider>
+		</md-card-title>
+		<md-card-content>		
+			<div flex layout-fill layout="column">	
+				<h4>Cliente: {{ hogar.nombreCliente }}</h4>
+				<h3>{{ hogar.direccion }}</h3>
+				<p>Registro: {{ hogar.fecha_registro }}</p>
+				<div ng-if="hogar.consumo_total" > Consumo total : $ {{ hogar.consumo_total }} </div>
+				<div ng-if="!hogar.consumo_total" > No se registra consumo </div>
+			</div>
+		</md-card-content>
+		<md-card-actions layout="row" layout-align="end center">
+		</md-card-actions>
+	</md-card>
+</md-content>
