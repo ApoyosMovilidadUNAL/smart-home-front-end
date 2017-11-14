@@ -24,6 +24,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
     
     this.authorized = false;
     this.memorizedState = null;
+    go('login');
   },
   login = function(user) {
   	if (sessionStorage.getItem('session_info') == null ) {
