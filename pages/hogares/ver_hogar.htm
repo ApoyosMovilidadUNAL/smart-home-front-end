@@ -12,10 +12,27 @@
 		<md-card-content>		
 			<div flex layout-fill layout="column">	
 				<h4>Cliente: {{ hogar.nombreCliente }}</h4>
-				<h3>{{ hogar.direccion }}</h3>
+				<h3>Direcci&oacute;n:  {{ hogar.direccion }}</h3>
 				<p>Registro: {{ hogar.fecha_registro }}</p>
-				<div ng-if="hogar.consumo_total" > Consumo total : $ {{ hogar.consumo_total }} </div>
-				<div ng-if="!hogar.consumo_total" > No se registra consumo </div>
+				<div ng-if="hogar.consumo_total.funciona " > 
+					<div flex> <h2>Consumo total : $ {{ (hogar.consumo_total.consumoe + hogar.consumo_total.consumoi)*1000 | currency }}<h2> </div>
+					<div flex layout="row">
+						<span flex class="md-padding"> <h3> Servicio </h3> </span>
+						<span flex="30" class="md-padding" layout-align="center center"> <h3> Consumo  </h3> </span>
+						<span flex="30" class="md-padding" layout-align="center center"> <h3> Cobro </h3> </span>
+					</div>
+					<div flex layout="row">
+						<span flex class="md-padding"> <h3> Electrodom&eacute;sticos </h3> </span>
+						<span flex="30" class="md-padding" layout-align="center center"> <p>{{ hogar.consumo_total.consumoe }}</p> </span>
+						<span flex="30" class="md-padding" layout-align="center center"> <p>{{ hogar.consumo_total.consumoe * 1000 | currency }}</p> </span>
+					</div>
+					<div flex layout="row">
+						<span flex class="md-padding"> <h3> Iluminaci&oacute;n</h3> </span>
+						<span flex="30" class="md-padding"> <p>{{ hogar.consumo_total.consumoi }} </p></span>
+						<span flex="30" class="md-padding"> <p>{{ hogar.consumo_total.consumoi * 1000 | currency }} </p></span>
+					</div>
+				</div>
+				<div ng-if=" !hogar.consumo_total.funciona " > No se encuentra registro en los servicios. </div>
 			</div>
 		</md-card-content>
 		<md-card-actions layout="row" layout-align="end center">
