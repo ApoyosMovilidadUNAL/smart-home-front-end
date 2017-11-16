@@ -7,6 +7,8 @@ function agregarVisitaController(){
 		templateUrl: 'pages/visitas/agregar_visita.htm',
 		controller: function($scope, $http, Authorization) {
 			
+			Authorization.check_session();
+			
 			$scope.home_list = [];
 			$scope.service_list = [];
 			$scope.minDate = new Date();

@@ -10,7 +10,9 @@ function mapaController() {
 
 		templateUrl : 'pages/mapa/mapa.htm',
 
-		controller : [ '$scope', '$state', '$timeout','$http', function($scope, $state,$timeout,$http) {
+		controller : [ '$scope', '$state', '$timeout','$http','Authorization', function($scope, $state,$timeout,$http, Authorization) {
+
+			Authorization.check_session();
 
 			$scope.greeting = "Aqui va el mapa";
 			$scope.listaHogares = [];

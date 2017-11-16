@@ -10,7 +10,9 @@ function agregarclienteController() {
 
 		templateUrl : 'pages/clientes/agregarcliente.htm',
 
-		controller : [ '$scope', '$state', '$stateParams','$http','$rootScope', function($scope, $state, $stateParams,$http,$rootScope) {
+		controller : [ '$scope', '$state', '$stateParams','$http','$rootScope', 'Authorization', function($scope, $state, $stateParams,$http,$rootScope, Authorization) {
+
+			Authorization.check_session();
 
 			console.log($state.params)
 

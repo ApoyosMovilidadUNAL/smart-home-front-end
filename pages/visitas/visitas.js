@@ -11,6 +11,9 @@ function visitasController() {
 		templateUrl : 'pages/visitas/visitas.htm',
 
 		controller : [ '$scope', '$http', '$state', 'Authorization', function($scope, $http, $state, Authorization) {
+			
+			Authorization.check_session();
+
 			$scope.greeting = "Este es el visitas"
 			$scope.listaVisitasInstalacion = [];
 			$scope.listaVisitasRetiro = [];

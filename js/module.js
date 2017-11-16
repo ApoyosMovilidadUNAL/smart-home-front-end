@@ -28,7 +28,7 @@ angular.module("homeApp").service('Authorization', function($state, $rootScope, 
   },
   login = function(user) {
   	if (sessionStorage.getItem('session_info') == null ) {
-  		if ( typeof(user) != 'undefined' ) {
+  		if ( typeof(user) != "undefined" ) {
         console.log(typeof(user))
   			$http({
          method : 'POST',
@@ -77,12 +77,18 @@ go = function(fallback){
   $state.go('login');
 }
 
+},
+check_session = function () {
+  if (sessionStorage.getItem('session_info') == null) {
+    go('login');
+  }
 };
 
 return {
   authorized: this.authorized,
   memorizedState: this.memorizedState,
   clear: clear,
+  check_session: check_session,
   go: go,
   login : login
 };

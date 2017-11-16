@@ -31,9 +31,10 @@ function clientesController() {
 
 		templateUrl : 'pages/clientes/clientes.htm',
 
-		controller : [ '$scope', '$mdDialog', '$state','$http','variableCliente', function($scope, $mdDialog, $state,$http, variableCliente) {
-
+		controller : [ '$scope', '$mdDialog', '$state','$http','variableCliente', 'Authorization', function($scope, $mdDialog, $state,$http, variableCliente, Authorization) {
 			
+			Authorization.check_session();
+
 			$scope.load = function(){
 				$http({
 					method : 'GET',

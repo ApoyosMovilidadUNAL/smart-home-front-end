@@ -28,6 +28,8 @@ function hogaresController() {
 
 		controller : [ '$scope', '$http', 'Authorization', 'hogarConsumo', function($scope, $http, Authorization, hogarConsumo) {
 
+			Authorization.check_session();
+
 			$http({
 				method : 'GET',
 				url : SERVER_ENDPOINT + '/hogar/consultarHogaresInformacion'

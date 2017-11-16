@@ -10,8 +10,10 @@ function agregarhogarController() {
  
     templateUrl : 'pages/hogares/agregarhogar.htm', 
  
-    controller : [ '$scope', '$state', '$stateParams','$http','$timeout','variableCliente', function($scope, $state, $stateParams,$http,$timeout,variableCliente) { 
+    controller : [ '$scope', '$state', '$stateParams','$http','$timeout','variableCliente', 'Authorization', function($scope, $state, $stateParams,$http,$timeout,variableCliente, Authorization) { 
  
+      Authorization.check_session();
+
       $scope.consultarHogares=function(){
     	  console.log("hola");
     	  console.log(variableCliente.getListHogares()); 

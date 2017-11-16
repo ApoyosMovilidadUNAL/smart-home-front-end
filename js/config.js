@@ -1,4 +1,4 @@
-var SERVER_ENDPOINT = 'http://192.168.0.24:8090/SmartHomeServer';
+var SERVER_ENDPOINT = 'http://192.168.2.102:8090/SmartHomeServer';
 var PAGES_PUBLIC = ['login']
 var PAGES_PRIVATE = ['clientes', 'hogares', 'usuarios', 'home', 'mapa','visitas', 'agregar-cliente', 'agregar-hogar', 'agregar-visita', 'ver-hogar']
 
@@ -24,11 +24,6 @@ var MENU = [
 		'name' : 'Mapa',
 		'icon' : 'add_location',
 		'path' : 'mapa'
-	},
-	{ 
-		'name' : 'Usuarios',
-		'icon' : 'person',
-		'path' : 'usuarios'
 	},
 	{ 
 		'name' : 'Visitas',

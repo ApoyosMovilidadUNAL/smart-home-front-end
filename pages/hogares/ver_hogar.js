@@ -13,6 +13,8 @@ function verHogar() {
     controller : [ '$scope', '$state', '$stateParams','$http', 'Authorization', 'hogarConsumo', 
     		function($scope, $state, $stateParams, $http, Authorization, hogarConsumo) { 
 
+    Authorization.check_session();
+
     $scope.hogar = hogarConsumo.getVarHogar();
     console.log($scope.hogar)
 
